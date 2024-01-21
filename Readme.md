@@ -1,4 +1,4 @@
-# Raspberry Pi Pico w ancs　client demo
+# Raspberry Pi Pico w ancs client demo
 
 ## Description
 
