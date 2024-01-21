@@ -24,6 +24,7 @@ pico_sdk_init()
 add_executable(ancs_client_demo
       ancs_client_demo.c
       picow_bt_example_background.c
+      picow_bt_example_common.c
 )
 
 pico_set_program_name(ancs_client_demo "ancs_client_demo")
