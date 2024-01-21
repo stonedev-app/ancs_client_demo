@@ -19,12 +19,13 @@ project(ancs_client_demo C CXX ASM)
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
+# Specified the source folder
+file(GLOB SOURCES "src/*.c")
+
 # Add executable. Default name is the project name, version 0.1
 
 add_executable(ancs_client_demo
-      ancs_client_demo.c
-      picow_bt_example_background.c
-      picow_bt_example_common.c
+      ${SOURCES}
 )
 
 pico_set_program_name(ancs_client_demo "ancs_client_demo")
@@ -41,12 +42,11 @@ target_link_libraries(ancs_client_demo
         pico_btstack_cyw43
         pico_cyw43_arch_none
 )
-pico_btstack_make_gatt_header(ancs_client_demo PRIVATE "${CMAKE_CURRENT_LIST_DIR}/ancs_client_demo.gatt")
+pico_btstack_make_gatt_header(ancs_client_demo PRIVATE "${CMAKE_CURRENT_LIST_DIR}/include/ancs_client_demo.gatt")
 
 # Add the standard include files to the build
 target_include_directories(ancs_client_demo PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}
-  ${CMAKE_CURRENT_LIST_DIR}/.. # for our common lwipopts or any other standard includes, if required
+  ${CMAKE_CURRENT_LIST_DIR}/include
 )
 
 # Add any user requested libraries
