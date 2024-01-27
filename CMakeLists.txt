@@ -42,9 +42,11 @@ target_link_libraries(ancs_client_demo
         pico_btstack_cyw43
         pico_cyw43_arch_none
 )
+
+# Create gatt header file 
 pico_btstack_make_gatt_header(ancs_client_demo PRIVATE "${CMAKE_CURRENT_LIST_DIR}/include/ancs_client_demo.gatt")
 
-# Add the standard include files to the build
+# Add the include files to the build
 target_include_directories(ancs_client_demo PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/include
 )
