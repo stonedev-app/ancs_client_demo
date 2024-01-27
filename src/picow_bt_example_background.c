@@ -19,8 +19,8 @@ int main() {
 
     // display init
     ansc_display_init();
-    // draw char
-    ansc_display_string("Hello World.");
+    // Starting up
+    ansc_display_string("Starting up..");
 
     int res = picow_bt_example_init();
     if (res){

@@ -48,6 +48,6 @@ void ansc_display_init()
 void ansc_display_string(char *str)
 {
     // draw char
-    ssd1306_write_string(&disp, 20, 32, str);
+    ssd1306_write_string(&disp, 5, 32, str);
     ssd1306_show(&disp);
 }
