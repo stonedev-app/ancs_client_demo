@@ -58,6 +58,8 @@
 // it needs to be regenerated when the GATT Database declared in ancs_client_demo.gatt file is modified
 #include "ancs_client_demo.h"
 
+#include "ansc_client_display.h"
+
 static const uint8_t adv_data[] = {
     // Flags general discoverable, BR/EDR not supported
     0x02, 0x01, 0x06,
@@ -80,9 +82,17 @@ static void app_packet_handler (uint8_t packet_type, uint16_t channel, uint8_t *
         case SM_EVENT_JUST_WORKS_REQUEST:
             sm_just_works_confirm(sm_event_just_works_request_get_handle(packet));
             printf("Just Works Confirmed.\n");
+            ansc_display_string("Confirmed.");
             break;
         case SM_EVENT_PASSKEY_DISPLAY_NUMBER:
             printf("Passkey display: %"PRIu32"\n", sm_event_passkey_display_number_get_passkey(packet));
+            char passkey[32];
+            sprintf(
+                passkey, 
+                "Passkey: %"PRIu32"", 
+                sm_event_passkey_display_number_get_passkey(packet)
+            );
+            ansc_display_string(passkey);
             break;
         default:
             break;
@@ -99,9 +109,11 @@ static void ancs_callback(uint8_t packet_type, uint16_t channel, uint8_t *packet
     switch (hci_event_ancs_meta_get_subevent_code(packet)){
         case ANCS_SUBEVENT_CLIENT_CONNECTED:
             printf("ANCS Client: Connected\n");
+            ansc_display_string("Connected.");
             break;
         case ANCS_SUBEVENT_CLIENT_DISCONNECTED:
             printf("ANCS Client: Disconnected\n");
+            ansc_display_string("Disconnected.");
             break;
         case ANCS_SUBEVENT_CLIENT_NOTIFICATION:
             attribute_name = ancs_client_attribute_name_for_id(ancs_subevent_client_notification_get_attribute_id(packet));

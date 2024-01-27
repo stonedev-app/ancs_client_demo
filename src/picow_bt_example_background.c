@@ -20,12 +20,17 @@ int main() {
     // display init
     ansc_display_init();
     // Starting up
-    ansc_display_string("Starting up..");
+    ansc_display_string("Starting up.");
 
     int res = picow_bt_example_init();
     if (res){
+        // Startup failure
+        ansc_display_string("Failure.");
         return -1;
     }
+
+    // Startup successful
+    ansc_display_string("Successful.");
 
     picow_bt_example_main();
     btstack_run_loop_execute();

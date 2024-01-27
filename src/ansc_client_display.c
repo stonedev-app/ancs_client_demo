@@ -47,6 +47,8 @@ void ansc_display_init()
 /// @param str string
 void ansc_display_string(char *str)
 {
+    // clear
+    ssd1306_clear(&disp);
     // draw char
     ssd1306_write_string(&disp, 5, 32, str);
     ssd1306_show(&disp);
