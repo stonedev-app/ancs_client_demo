@@ -49,8 +49,10 @@ pico_btstack_make_gatt_header(ancs_client_demo PRIVATE "${CMAKE_CURRENT_LIST_DIR
 # Add the include files to the build
 target_include_directories(ancs_client_demo PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/include
+  ${CMAKE_CURRENT_LIST_DIR}/lib/ssd1306/ssd1306rp/include
 )
 
+# Add subdirectory
 add_subdirectory(lib/ssd1306)
 
 # Add any user requested libraries
