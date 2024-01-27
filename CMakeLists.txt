@@ -49,9 +49,12 @@ target_include_directories(ancs_client_demo PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/include
 )
 
+add_subdirectory(lib/ssd1306)
+
 # Add any user requested libraries
 target_link_libraries(ancs_client_demo 
-        )
+        ssd1306_rp
+)
 
 pico_add_extra_outputs(ancs_client_demo)
 
