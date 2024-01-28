@@ -60,6 +60,71 @@
 
 #include "ansc_client_display.h"
 
+struct ancs_attribute_info {
+    char app_identifier[128];
+    char id_title[128];
+    char id_subtitle[128];
+    char id_message[128];
+    char id_message_size[128];
+    char id_date[128];
+};
+
+static struct ancs_attribute_info ancsAttrInfo;
+
+static void set_ancs_attribute_info(uint8_t *packet);
+static void set_ancs_attribute_info(uint8_t *packet){
+    // Get attributeId.
+    uint16_t attrId = ancs_subevent_client_notification_get_attribute_id(packet);
+    switch (attrId)
+    {
+    case 0: // AppIdentifier
+        // Init ancs attrigute info.
+        ancsAttrInfo = (struct ancs_attribute_info){0};
+        // Set AppIdentifier
+        strcpy(ancsAttrInfo.app_identifier, ancs_subevent_client_notification_get_text(packet));
+        break;
+    case 1: // IDTitle
+        // Set IDTitle.
+        strcpy(ancsAttrInfo.id_title, ancs_subevent_client_notification_get_text(packet));
+        break;
+    case 2: // IDSubtitle
+        // Set IDSubtitle.
+        strcpy(ancsAttrInfo.id_subtitle, ancs_subevent_client_notification_get_text(packet));
+        break;
+    case 3: // IDMessage
+        // Set IDMessage.
+        strcpy(ancsAttrInfo.id_message, ancs_subevent_client_notification_get_text(packet));
+        break;
+    case 4: // IDMessageSize
+        // Set IDMessageSize.
+        strcpy(ancsAttrInfo.id_message_size, ancs_subevent_client_notification_get_text(packet));
+        break;
+    case 5: // IDDate
+        // Set IDDate.
+        strcpy(ancsAttrInfo.id_date, ancs_subevent_client_notification_get_text(packet));
+        break;
+    default:
+        break;
+    }
+};
+
+static void ansc_display_alarm();
+static void ansc_display_alarm(){
+    // Do nothing if IDDate is empty.
+    if (strlen(ancsAttrInfo.id_date) == 0) {
+        return;
+    }
+    // Determine if it is a timer notification.
+    if (strcmp("com.apple.mobiletimer", ancsAttrInfo.app_identifier) == 0 && 
+        strcmp("時計", ancsAttrInfo.id_title) == 0 && 
+        strcmp("アラーム", ancsAttrInfo.id_message) == 0
+    )
+    {
+        // Notify on the screen that the alarm is sounding.
+        ansc_display_string("Timer alarm.");
+    }
+};
+
 static const uint8_t adv_data[] = {
     // Flags general discoverable, BR/EDR not supported
     0x02, 0x01, 0x06,
@@ -119,6 +184,8 @@ static void ancs_callback(uint8_t packet_type, uint16_t channel, uint8_t *packet
             attribute_name = ancs_client_attribute_name_for_id(ancs_subevent_client_notification_get_attribute_id(packet));
             if (!attribute_name) break;
             printf("Notification: %s - %s\n", attribute_name, ancs_subevent_client_notification_get_text(packet));
+            set_ancs_attribute_info(packet);
+            ansc_display_alarm();
             break;
         default:
             break;
