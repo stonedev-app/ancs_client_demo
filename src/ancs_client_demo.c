@@ -61,12 +61,12 @@
 #include "ansc_client_display.h"
 
 struct ancs_attribute_info {
-    char app_identifier[128];
-    char id_title[128];
-    char id_subtitle[128];
-    char id_message[128];
-    char id_message_size[128];
-    char id_date[128];
+    char app_identifier[256];
+    char id_title[256];
+    char id_subtitle[256];
+    char id_message[512];
+    char id_message_size[8];
+    char id_date[32];
 };
 
 static struct ancs_attribute_info ancsAttrInfo;
