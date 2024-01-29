@@ -1,0 +1,41 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "cmake",
+      "label": "CMake: build ancs_client_demo",
+      "command": "build",
+      "targets": [
+        "ancs_client_demo"
+      ],
+      "group": "build",
+      "detail": "CMake ancs_client_demo build task"
+    },
+    {
+      "type": "shell",
+      "label": "OpenOCD: upload ancs_client_demo",
+      "command": "${env:OPEN_OCD_PATH}",
+      "args": [
+        "-f",
+        "interface/cmsis-dap.cfg",
+        "-f",
+        "target/rp2040.cfg",
+        "-s",
+        "${env:OPEN_OCD_TCL_PATH}",
+        "-c",
+        "\"program ${command:cmake.launchTargetPath} verify reset exit\""
+      ],
+      "options": {
+        "cwd": "${workspaceRoot}/build"
+      },
+      "dependsOn":["CMake: build ancs_client_demo"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "OpenOCD ancs_client_demo upload task",
+    },
+  ]
+}
